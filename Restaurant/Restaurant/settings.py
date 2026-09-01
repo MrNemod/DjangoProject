@@ -12,8 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6o_sa%+&j!z6x-ul#kaff(m=0gfa$+^hk2#lfooga)=f3e1z%j'
 load_dotenv()
+SECRET_KEY = os.getenv('DJANGO_SECRET')
 IMAGEKIT_PRIVATE_KEY = os.getenv('IMAKEKIT_PRIVATE_KEY')
 IMAGEKIT_PUBLIC_KEY = os.getenv('IMAGEKIT_PUBLIC_KEY')
 IMAGEKIT_URL_ENDPOINT = os.getenv('IMAGEKIT_URL_ENDPOINT')
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Menu',
 ]
 
 MIDDLEWARE = [
@@ -75,16 +76,6 @@ DATABASES = {
     }
 }
 
-#CDN
-STORAGES = {
-    'default': {
-        'BACKEND': 'Restaurant.core.customStorage.imageKitStorage',
-    },
-    staticfiles: {
-        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
@@ -120,8 +111,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STORAGES = {
+    #Images CDN
+    'default': {
+        'BACKEND': 'Restaurant.core.customStorage.imageKitStorage',
+    },
+    #Static files
+    'staticfiles': {
+        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+    }
+}
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
