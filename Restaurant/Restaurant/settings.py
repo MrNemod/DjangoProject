@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import tailwind
 from django.contrib import staticfiles
 from dotenv import load_dotenv
 import os
@@ -27,6 +28,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'tailwind',
+    #app de tailwind
+    'theme',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Menu',
 ]
+
+TAILWIND_APP_NAME = 'theme'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

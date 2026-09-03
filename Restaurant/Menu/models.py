@@ -1,4 +1,6 @@
 from django.db import models
+from pydantic import ValidationError
+
 
 # Create your models here.
 class allergens(models.Model):
@@ -33,3 +35,21 @@ class item(models.Model):
     class Meta:
         verbose_name_plural = "Items"
         verbose_name = "Item"
+
+class itemImage(models.Model):
+    item = models.ForeignKey(item, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    def clean(self):
+        super().clean()
+        if not self.pk and self.item_id:
+            current_count = self.item.images.count()
+            if current_count >= 5:
+                raise ValidationError("No puedes subir más de 5 imágenes para este producto.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Imagen de {self.item.name}"
